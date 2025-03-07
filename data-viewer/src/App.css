@@ -1,0 +1,52 @@
+/* Import a Google Font (Example: Inter) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap");
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Styles */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #333;
+  --border-radius: 8px;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.AllCenteredFlex {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+/* Apply Global Font */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  padding: 20px;
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+p {
+  font-size: 16px;
+}
+
+/* Responsive Typography */
+@media (max-width: 1080px) {
+  body {
+    font-size: 14px;
+  }
+}

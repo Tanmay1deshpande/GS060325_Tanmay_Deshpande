@@ -1,0 +1,35 @@
+.login_section {
+  width: 50%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login_main {
+  width: 100%;
+}
+
+.fancy_input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #d1a9a9;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  font-size: 16px;
+  color: #4a4a4a;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fancy_input::placeholder {
+  color: #a5a5a5;
+  font-style: italic;
+}
+
+.fancy_input:focus {
+  border-color: #c08497;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0px 4px 15px rgba(192, 132, 151, 0.3);
+  transform: scale(1.02);
+}
