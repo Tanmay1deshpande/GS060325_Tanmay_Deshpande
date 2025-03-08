@@ -20,7 +20,7 @@ function App() {
     const token =
       useSelector((state: RootState) => state.auth.token) ||
       Cookies.get("token");
-    return token ? element : <Navigate to="/home" />;
+    return token ? element : <Navigate to="/login" />;
   };
 
   return (
@@ -28,6 +28,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/romeo" element={<Home />} />
           <Route path="/chart" element={<Chart />} />
           <Route path="/home" element={<PrivateRoute element={<Home />} />} />
           <Route path="*" element={<Navigate to="/login" />} />

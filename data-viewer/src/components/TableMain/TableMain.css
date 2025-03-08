@@ -1,0 +1,16 @@
+.css-1ywowvz-MuiPaper-root {
+  width: 85% !important;
+  left: 250px;
+  top: 74px;
+  position: absolute;
+}
+
+/* .ag-center-cols-container {
+  width: 100% !important;
+  height: 100% !important;
+} */
+
+.all_row_class {
+  height: 35px;
+  background-color: aliceblue !important;
+}

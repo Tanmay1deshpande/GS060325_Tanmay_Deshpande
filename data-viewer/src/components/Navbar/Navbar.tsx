@@ -11,10 +11,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import "./Navbar.css";
 
 type Props = {};
 
-const Navbar = (props: Props) => {
+const Navbar: React.FC<Props> = (props) => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -33,19 +34,7 @@ const Navbar = (props: Props) => {
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={auth}
-                onChange={handleChange}
-                aria-label="login switch"
-              />
-            }
-            label={auth ? "Logout" : "Login"}
-          />
-        </FormGroup>
-        <AppBar position="static">
+        <AppBar position="static" sx={{ zIndex: "1300" }}>
           <Toolbar>
             <IconButton
               size="large"
