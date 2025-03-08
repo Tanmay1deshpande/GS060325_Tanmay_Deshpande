@@ -9,6 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import axios from "axios";
 import logoMain from "../../assets/images/logo_main.svg";
+import {
+  API_HTTP,
+  loginApiEndpoint,
+  REACT_APP_API_URL,
+} from "../../constants/api/apiConstants";
 // import {ReactComponent as Logo} from "../../assets/images/logo.svg"
 // import { loginUser } from "../services/authService";
 
@@ -41,11 +46,15 @@ const Login: React.FC = () => {
       console.log("Invalid Credentials");
       alert("Invalid Credentials");
     }
+    console.log("Endpoint: ", API_HTTP + REACT_APP_API_URL + loginApiEndpoint);
     try {
-      const response = await axios.post("http://localhost:5000/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        API_HTTP + REACT_APP_API_URL + loginApiEndpoint,
+        {
+          username,
+          password,
+        }
+      );
       login(response.data.token);
       navigate("/home");
     } catch (error) {

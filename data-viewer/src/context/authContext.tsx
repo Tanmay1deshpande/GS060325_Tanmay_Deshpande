@@ -20,11 +20,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = (jwtToken: string) => {
     Cookies.set("token", jwtToken, { expires: 1 }); // Expires in 1 day
     setToken(jwtToken);
+    localStorage.setItem("authToken", jwtToken);
   };
 
   const logout = () => {
+    console.log("Logging out");
     Cookies.remove("token");
+    localStorage.removeItem("authToken");
     setToken(null);
+    window.location.href = "/login";
   };
 
   return (
