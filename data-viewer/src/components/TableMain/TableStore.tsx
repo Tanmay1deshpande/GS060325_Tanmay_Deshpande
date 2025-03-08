@@ -21,6 +21,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import * as XLSX from "xlsx";
+// import initSqlJs, { Database } from "sql.js/dist/sql-wasm.js";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,7 +40,14 @@ interface SkuRow {
 }
 
 interface PlanRow {
+  Store: string;
   SKU: string;
+  Week: string;
+  Sales_Units: number;
+  Sales_Dollars: number;
+  Cost_Dollars: number;
+  GM_Dollars: number;
+  GM_Percentage: number;
 }
 
 const dialogBoxStyle = {
@@ -71,6 +79,9 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
   const [fileUploaderOpen, setFileUploaderOpen] = React.useState(false);
   const [allFieldsFilled, setAllFieldsFilled] = React.useState(true);
   const [data, setData] = React.useState<any[]>([]);
+  // const [db, setDb] = React.useState<Database | null>(null);
+  const [queryResult, setQueryResult] = React.useState<any[]>([]);
+
   const handleOpen = () => setDialogBoxOpen(true);
   const handleFileUploaderOpen = () => setFileUploaderOpen(true);
 
@@ -135,756 +146,156 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
 
   // Row Data for SKU: The data to be displayed.
   const [rowDataSku, setRowDataSku] = React.useState<SkuRow[]>([
-    {
-      SKU: "Crew Neck Merino Wool Sweater",
-      Price: 114.99,
-      Cost: 18.28,
-    },
-    {
-      SKU: "Faux Leather Leggings",
-      Price: 9.99,
-      Cost: 8.45,
-    },
-    {
-      SKU: "Fleece-Lined Parka",
-      Price: 199.99,
-      Cost: 17.8,
-    },
-    {
-      SKU: "Cotton Polo Shirt",
-      Price: 139.99,
-      Cost: 10.78,
-    },
-    {
-      SKU: "Foldable Travel Hat",
-      Price: 44.99,
-      Cost: 27.08,
-    },
-    {
-      SKU: "Chic Quilted Wallet",
-      Price: 14.99,
-      Cost: 4.02,
-    },
-    {
-      SKU: "High-Slit Maxi Dress",
-      Price: 74.99,
-      Cost: 47.47,
-    },
-    {
-      SKU: "Turtleneck Cable Knit Sweater",
-      Price: 49.99,
-      Cost: 22.6,
-    },
-    {
-      SKU: "Retro-Inspired Sunglasses",
-      Price: 194.99,
-      Cost: 115.63,
-    },
-    {
-      SKU: "Stretch Denim Overalls",
-      Price: 129.99,
-      Cost: 47.06,
-    },
-    {
-      SKU: "Adjustable Elastic Headband",
-      Price: 19.99,
-      Cost: 1.34,
-    },
-    {
-      SKU: "Adjustable Baseball Cap",
-      Price: 4.99,
-      Cost: 2.29,
-    },
-    {
-      SKU: "Cotton Polo Shirt",
-      Price: 114.99,
-      Cost: 60.94,
-    },
-    {
-      SKU: "Faux Suede Ankle Boots",
-      Price: 94.99,
-      Cost: 71.53,
-    },
-    {
-      SKU: "Striped Cotton Socks",
-      Price: 9.99,
-      Cost: 6.91,
-    },
-    {
-      SKU: "Performance Compression Tights",
-      Price: 54.99,
-      Cost: 59.61,
-    },
-    {
-      SKU: "Vintage Logo Hoodie",
-      Price: 94.99,
-      Cost: 84.45,
-    },
-    {
-      SKU: "Floral Chiffon Wrap Dress",
-      Price: 149.99,
-      Cost: 68.55,
-    },
-    {
-      SKU: "Asymmetrical Hem Skirt",
-      Price: 99.99,
-      Cost: 66.89,
-    },
-    {
-      SKU: "Slim Fit Pinstripe Suit",
-      Price: 99.99,
-      Cost: 13.3,
-    },
-    {
-      SKU: "Chunky Heel Sandals",
-      Price: 89.99,
-      Cost: 46.7,
-    },
-    {
-      SKU: "Suede Fringe Vest",
-      Price: 184.99,
-      Cost: 159.65,
-    },
-    {
-      SKU: "Relaxed Fit Cargo Pants",
-      Price: 149.99,
-      Cost: 7.2,
-    },
-    {
-      SKU: "Corduroy A-Line Skirt",
-      Price: 129.99,
-      Cost: 48.62,
-    },
-    {
-      SKU: "Formal Dress Shoes",
-      Price: 164.99,
-      Cost: 161.69,
-    },
-    {
-      SKU: "Tailored Corduroy Blazer",
-      Price: 89.99,
-      Cost: 62.99,
-    },
-    {
-      SKU: "Foldable Travel Hat",
-      Price: 194.99,
-      Cost: 56.16,
-    },
-    {
-      SKU: "Asymmetrical Hem Skirt",
-      Price: 89.99,
-      Cost: 67.94,
-    },
-    {
-      SKU: "Plaid Flannel Shirt",
-      Price: 124.99,
-      Cost: 17.5,
-    },
-    {
-      SKU: "Oversized Hoodie",
-      Price: 159.99,
-      Cost: 122.23,
-    },
-    {
-      SKU: "Woven Straw Sun Hat",
-      Price: 164.99,
-      Cost: 8.91,
-    },
-    {
-      SKU: "Faux Fur Winter Coat",
-      Price: 9.99,
-      Cost: 7.37,
-    },
-    {
-      SKU: "Casual Cotton Romper",
-      Price: 119.99,
-      Cost: 52.32,
-    },
-    {
-      SKU: "Racerback Sports Bra",
-      Price: 14.99,
-      Cost: 8.72,
-    },
-    {
-      SKU: "Polarized Sports Sunglasses",
-      Price: 79.99,
-      Cost: 9.44,
-    },
-    {
-      SKU: "Chunky Platform Sneakers",
-      Price: 109.99,
-      Cost: 61.7,
-    },
-    {
-      SKU: "Slim Fit Chinos",
-      Price: 114.99,
-      Cost: 51.98,
-    },
-    {
-      SKU: "Faux Leather Leggings",
-      Price: 194.99,
-      Cost: 13.06,
-    },
-    {
-      SKU: "Water-Resistant Fanny Pack",
-      Price: 24.99,
-      Cost: 23.64,
-    },
-    {
-      SKU: "Performance Compression Tights",
-      Price: 14.99,
-      Cost: 16.29,
-    },
-    {
-      SKU: "Cropped Faux Leather Jacket",
-      Price: 79.99,
-      Cost: 19.52,
-    },
-    {
-      SKU: "Breathable Mesh Shorts",
-      Price: 194.99,
-      Cost: 28.08,
-    },
-    {
-      SKU: "Minimalist Silver Ring",
-      Price: 174.99,
-      Cost: 147.34,
-    },
-    {
-      SKU: "Ribbed Turtleneck Dress",
-      Price: 94.99,
-      Cost: 22.61,
-    },
-    {
-      SKU: "Velvet Slip Dress",
-      Price: 69.99,
-      Cost: 41.64,
-    },
-    {
-      SKU: "Waterproof Smartwatch",
-      Price: 144.99,
-      Cost: 53.5,
-    },
-    {
-      SKU: "Patterned Cotton Bucket Hat",
-      Price: 144.99,
-      Cost: 114.4,
-    },
-    {
-      SKU: "Diamond Stud Earrings",
-      Price: 144.99,
-      Cost: 146.0,
-    },
-    {
-      SKU: "Tassel Fringe Handbag",
-      Price: 59.99,
-      Cost: 33.29,
-    },
-    {
-      SKU: "Tactical Hiking Backpack",
-      Price: 49.99,
-      Cost: 52.54,
-    },
-    {
-      SKU: "Patterned Cotton Bucket Hat",
-      Price: 9.99,
-      Cost: 2.14,
-    },
-    {
-      SKU: "Bohemian Beaded Bracelet",
-      Price: 124.99,
-      Cost: 116.12,
-    },
-    {
-      SKU: "Mesh Panel Yoga Pants",
-      Price: 184.99,
-      Cost: 166.86,
-    },
-    {
-      SKU: "Diamond Stud Earrings",
-      Price: 14.99,
-      Cost: 13.75,
-    },
-    {
-      SKU: "Faux Suede Ankle Boots",
-      Price: 84.99,
-      Cost: 90.43,
-    },
-    {
-      SKU: "Water-Resistant Fanny Pack",
-      Price: 4.99,
-      Cost: 3.73,
-    },
-    {
-      SKU: "Plaid Wool Scarf",
-      Price: 139.99,
-      Cost: 97.57,
-    },
-    {
-      SKU: "Cropped Faux Leather Jacket",
-      Price: 179.99,
-      Cost: 163.43,
-    },
-    {
-      SKU: "Textured Knit Pullover",
-      Price: 54.99,
-      Cost: 50.43,
-    },
-    {
-      SKU: "Boho Style Tassel Earrings",
-      Price: 194.99,
-      Cost: 193.43,
-    },
-    {
-      SKU: "Sherpa Lined Hooded Coat",
-      Price: 174.99,
-      Cost: 128.09,
-    },
-    {
-      SKU: "Mesh Panel Yoga Pants",
-      Price: 69.99,
-      Cost: 45.49,
-    },
-    {
-      SKU: "Graphic Print T-Shirt",
-      Price: 109.99,
-      Cost: 53.35,
-    },
-    {
-      SKU: "Fitted V-Neck Sweater",
-      Price: 124.99,
-      Cost: 110.24,
-    },
-    {
-      SKU: "Formal Dress Shoes",
-      Price: 74.99,
-      Cost: 8.62,
-    },
-    {
-      SKU: "Satin Lace Camisole",
-      Price: 184.99,
-      Cost: 136.15,
-    },
-    {
-      SKU: "Slim Fit Chinos",
-      Price: 89.99,
-      Cost: 61.64,
-    },
-    {
-      SKU: "Retro-Inspired Sunglasses",
-      Price: 44.99,
-      Cost: 41.12,
-    },
-    {
-      SKU: "Formal Velvet Blazer",
-      Price: 194.99,
-      Cost: 189.14,
-    },
-    {
-      SKU: "Striped Cotton Socks",
-      Price: 169.99,
-      Cost: 10.54,
-    },
-    {
-      SKU: "Yoga Leggings",
-      Price: 164.99,
-      Cost: 172.58,
-    },
-    {
-      SKU: "Formal Dress Shoes",
-      Price: 9.99,
-      Cost: 1.96,
-    },
-    {
-      SKU: "Aviator Sunglasses",
-      Price: 44.99,
-      Cost: 12.37,
-    },
-    {
-      SKU: "Perforated Leather Belt",
-      Price: 44.99,
-      Cost: 4.5,
-    },
-    {
-      SKU: "Smart Heated Gloves",
-      Price: 109.99,
-      Cost: 100.53,
-    },
-    {
-      SKU: "Silk Embroidered Kimono",
-      Price: 109.99,
-      Cost: 78.64,
-    },
-    {
-      SKU: "Performance Swim Trunks",
-      Price: 174.99,
-      Cost: 157.84,
-    },
-    {
-      SKU: "Tactical Hiking Backpack",
-      Price: 69.99,
-      Cost: 58.16,
-    },
-    {
-      SKU: "Thermal Running Gloves",
-      Price: 49.99,
-      Cost: 53.79,
-    },
-    {
-      SKU: "Quilted Leather Clutch",
-      Price: 134.99,
-      Cost: 95.84,
-    },
-    {
-      SKU: "Rugged Utility Jacket",
-      Price: 44.99,
-      Cost: 2.43,
-    },
-    {
-      SKU: "Tapered Suit Trousers",
-      Price: 64.99,
-      Cost: 53.1,
-    },
-    {
-      SKU: "Faux Leather Leggings",
-      Price: 139.99,
-      Cost: 22.54,
-    },
-    {
-      SKU: "Lace-Up Combat Boots",
-      Price: 109.99,
-      Cost: 64.89,
-    },
-    {
-      SKU: "Athletic Crew Socks",
-      Price: 174.99,
-      Cost: 1.75,
-    },
-    {
-      SKU: "Silk Neck Scarf",
-      Price: 94.99,
-      Cost: 49.87,
-    },
-    {
-      SKU: "Sherpa Lined Denim Jacket",
-      Price: 119.99,
-      Cost: 28.92,
-    },
-    {
-      SKU: "Lace-Up Combat Boots",
-      Price: 24.99,
-      Cost: 24.84,
-    },
-    {
-      SKU: "Sporty Zip-Up Hoodie",
-      Price: 184.99,
-      Cost: 65.3,
-    },
-    {
-      SKU: "Minimalist Gold Necklace",
-      Price: 104.99,
-      Cost: 52.08,
-    },
-    {
-      SKU: "Classic Denim Jacket",
-      Price: 149.99,
-      Cost: 144.29,
-    },
-    {
-      SKU: "Tassel Fringe Handbag",
-      Price: 109.99,
-      Cost: 3.19,
-    },
-    {
-      SKU: "Oversized Cat-Eye Sunglasses",
-      Price: 159.99,
-      Cost: 109.11,
-    },
-    {
-      SKU: "Minimalist Leather Watch",
-      Price: 49.99,
-      Cost: 49.89,
-    },
-    {
-      SKU: "Quilted Leather Clutch",
-      Price: 4.99,
-      Cost: 0.68,
-    },
-    {
-      SKU: "Floral Chiffon Wrap Dress",
-      Price: 184.99,
-      Cost: 39.59,
-    },
-    {
-      SKU: "Graphic Skateboard Tee",
-      Price: 194.99,
-      Cost: 53.43,
-    },
-    {
-      SKU: "Minimalist Silver Ring",
-      Price: 9.99,
-      Cost: 9.53,
-    },
-    {
-      SKU: "Padded Winter Mittens",
-      Price: 154.99,
-      Cost: 53.78,
-    },
-    {
-      SKU: "Classic Denim Jacket",
-      Price: 109.99,
-      Cost: 89.53,
-    },
-    {
-      SKU: "Lace-Up Combat Boots",
-      Price: 134.99,
-      Cost: 75.59,
-    },
-    {
-      SKU: "Cuffed Jogger Pants",
-      Price: 69.99,
-      Cost: 64.95,
-    },
-    {
-      SKU: "Oversized Hoodie",
-      Price: 124.99,
-      Cost: 23.25,
-    },
-    {
-      SKU: "Unisex Oversized Sweatshirt",
-      Price: 139.99,
-      Cost: 77.13,
-    },
-    {
-      SKU: "Puffer Insulated Vest",
-      Price: 14.99,
-      Cost: 10.72,
-    },
-    {
-      SKU: "Faux Fur Winter Coat",
-      Price: 14.99,
-      Cost: 4.56,
-    },
-    {
-      SKU: "Tactical Hiking Backpack",
-      Price: 199.99,
-      Cost: 115.79,
-    },
-    {
-      SKU: "Stretch Fit Slip-On Sneakers",
-      Price: 124.99,
-      Cost: 54.12,
-    },
-    {
-      SKU: "Crew Neck Merino Wool Sweater",
-      Price: 19.99,
-      Cost: 3.62,
-    },
-    {
-      SKU: "Handcrafted Wooden Watch",
-      Price: 154.99,
-      Cost: 122.91,
-    },
-    {
-      SKU: "Smart Heated Gloves",
-      Price: 34.99,
-      Cost: 4.13,
-    },
-    {
-      SKU: "Luxury Silk Tie",
-      Price: 114.99,
-      Cost: 49.68,
-    },
-    {
-      SKU: "Heavy-Duty Work Gloves",
-      Price: 164.99,
-      Cost: 63.03,
-    },
-    {
-      SKU: "Waterproof Hiking Boots",
-      Price: 144.99,
-      Cost: 17.25,
-    },
-    {
-      SKU: "Performance Swim Trunks",
-      Price: 114.99,
-      Cost: 41.51,
-    },
-    {
-      SKU: "Feather Embellished Fedora",
-      Price: 184.99,
-      Cost: 193.87,
-    },
-    {
-      SKU: "Floral Chiffon Wrap Dress",
-      Price: 159.99,
-      Cost: 110.23,
-    },
-    {
-      SKU: "Bamboo Fiber Boxer Briefs",
-      Price: 89.99,
-      Cost: 7.74,
-    },
-    {
-      SKU: "Woven Straw Sun Hat",
-      Price: 99.99,
-      Cost: 9.7,
-    },
-    {
-      SKU: "Silk Embroidered Kimono",
-      Price: 74.99,
-      Cost: 12.3,
-    },
-    {
-      SKU: "Asymmetrical Hem Skirt",
-      Price: 184.99,
-      Cost: 19.98,
-    },
-    {
-      SKU: "Wool Fedora Hat",
-      Price: 99.99,
-      Cost: 86.49,
-    },
-    {
-      SKU: "Fleece Jogger Sweatpants",
-      Price: 79.99,
-      Cost: 45.67,
-    },
-    {
-      SKU: "Cuffed Jogger Pants",
-      Price: 114.99,
-      Cost: 52.9,
-    },
-    {
-      SKU: "Relaxed Fit Cargo Pants",
-      Price: 199.99,
-      Cost: 80.8,
-    },
-    {
-      SKU: "Velvet Slip Dress",
-      Price: 164.99,
-      Cost: 106.75,
-    },
-    {
-      SKU: "Cashmere Turtleneck Sweater",
-      Price: 99.99,
-      Cost: 91.79,
-    },
-    {
-      SKU: "High-Waisted Bikini Set",
-      Price: 64.99,
-      Cost: 69.34,
-    },
-    {
-      SKU: "Minimalist Gold Necklace",
-      Price: 74.99,
-      Cost: 71.47,
-    },
-    {
-      SKU: "Oversized Cat-Eye Sunglasses",
-      Price: 119.99,
-      Cost: 117.83,
-    },
-    {
-      SKU: "Minimalist Silver Ring",
-      Price: 64.99,
-      Cost: 49.59,
-    },
-    {
-      SKU: "Sherpa Lined Denim Jacket",
-      Price: 189.99,
-      Cost: 28.69,
-    },
-    {
-      SKU: "Cropped Faux Leather Jacket",
-      Price: 39.99,
-      Cost: 21.03,
-    },
-    {
-      SKU: "Tassel Fringe Handbag",
-      Price: 134.99,
-      Cost: 20.79,
-    },
-    {
-      SKU: "Reflective Running Vest",
-      Price: 154.99,
-      Cost: 112.21,
-    },
-    {
-      SKU: "Classic Denim Jacket",
-      Price: 24.99,
-      Cost: 22.29,
-    },
-    {
-      SKU: "Faux Leather Leggings",
-      Price: 64.99,
-      Cost: 43.02,
-    },
-    {
-      SKU: "Woven Straw Sun Hat",
-      Price: 9.99,
-      Cost: 0.8,
-    },
-    {
-      SKU: "Silk Embroidered Kimono",
-      Price: 134.99,
-      Cost: 48.06,
-    },
-    {
-      SKU: "High-Slit Maxi Dress",
-      Price: 9.99,
-      Cost: 7.85,
-    },
-    {
-      SKU: "Fleece-Lined Parka",
-      Price: 59.99,
-      Cost: 17.4,
-    },
-    {
-      SKU: "Silk Neck Scarf",
-      Price: 114.99,
-      Cost: 120.62,
-    },
-    {
-      SKU: "Unisex Oversized Sweatshirt",
-      Price: 134.99,
-      Cost: 106.64,
-    },
-    {
-      SKU: "Textured Knit Pullover",
-      Price: 34.99,
-      Cost: 33.38,
-    },
-    {
-      SKU: "Luxury Silk Tie",
-      Price: 54.99,
-      Cost: 20.95,
-    },
-    {
-      SKU: "Rugged Utility Jacket",
-      Price: 29.99,
-      Cost: 20.69,
-    },
-    {
-      SKU: "Retro-Inspired Sunglasses",
-      Price: 79.99,
-      Cost: 82.55,
-    },
-    {
-      SKU: "High-Slit Maxi Dress",
-      Price: 14.99,
-      Cost: 6.49,
-    },
-    {
-      SKU: "Boho Style Tassel Earrings",
-      Price: 104.99,
-      Cost: 11.02,
-    },
-    {
-      SKU: "Metallic Hoop Earrings",
-      Price: 84.99,
-      Cost: 35.61,
-    },
+    { SKU: "Crew Neck Merino Wool Sweater", Price: 114.99, Cost: 18.28 },
+    { SKU: "Faux Leather Leggings", Price: 9.99, Cost: 8.45 },
+    { SKU: "Fleece-Lined Parka", Price: 199.99, Cost: 17.8 },
+    { SKU: "Cotton Polo Shirt", Price: 139.99, Cost: 10.78 },
+    { SKU: "Foldable Travel Hat", Price: 44.99, Cost: 27.08 },
+    { SKU: "Chic Quilted Wallet", Price: 14.99, Cost: 4.02 },
+    { SKU: "High-Slit Maxi Dress", Price: 74.99, Cost: 47.47 },
+    { SKU: "Turtleneck Cable Knit Sweater", Price: 49.99, Cost: 22.6 },
+    { SKU: "Retro-Inspired Sunglasses", Price: 194.99, Cost: 115.63 },
+    { SKU: "Stretch Denim Overalls", Price: 129.99, Cost: 47.06 },
+    { SKU: "Adjustable Elastic Headband", Price: 19.99, Cost: 1.34 },
+    { SKU: "Adjustable Baseball Cap", Price: 4.99, Cost: 2.29 },
+    { SKU: "Cotton Polo Shirt", Price: 114.99, Cost: 60.94 },
+    { SKU: "Faux Suede Ankle Boots", Price: 94.99, Cost: 71.53 },
+    { SKU: "Striped Cotton Socks", Price: 9.99, Cost: 6.91 },
+    { SKU: "Performance Compression Tights", Price: 54.99, Cost: 59.61 },
+    { SKU: "Vintage Logo Hoodie", Price: 94.99, Cost: 84.45 },
+    { SKU: "Floral Chiffon Wrap Dress", Price: 149.99, Cost: 68.55 },
+    { SKU: "Asymmetrical Hem Skirt", Price: 99.99, Cost: 66.89 },
+    { SKU: "Slim Fit Pinstripe Suit", Price: 99.99, Cost: 13.3 },
+    { SKU: "Chunky Heel Sandals", Price: 89.99, Cost: 46.7 },
+    { SKU: "Suede Fringe Vest", Price: 184.99, Cost: 159.65 },
+    { SKU: "Relaxed Fit Cargo Pants", Price: 149.99, Cost: 7.2 },
+    { SKU: "Corduroy A-Line Skirt", Price: 129.99, Cost: 48.62 },
+    { SKU: "Formal Dress Shoes", Price: 164.99, Cost: 161.69 },
+    { SKU: "Tailored Corduroy Blazer", Price: 89.99, Cost: 62.99 },
+    { SKU: "Foldable Travel Hat", Price: 194.99, Cost: 56.16 },
+    { SKU: "Asymmetrical Hem Skirt", Price: 89.99, Cost: 67.94 },
+    { SKU: "Plaid Flannel Shirt", Price: 124.99, Cost: 17.5 },
+    { SKU: "Oversized Hoodie", Price: 159.99, Cost: 122.23 },
+    { SKU: "Woven Straw Sun Hat", Price: 164.99, Cost: 8.91 },
+    { SKU: "Faux Fur Winter Coat", Price: 9.99, Cost: 7.37 },
+    { SKU: "Casual Cotton Romper", Price: 119.99, Cost: 52.32 },
+    { SKU: "Racerback Sports Bra", Price: 14.99, Cost: 8.72 },
+    { SKU: "Polarized Sports Sunglasses", Price: 79.99, Cost: 9.44 },
+    { SKU: "Chunky Platform Sneakers", Price: 109.99, Cost: 61.7 },
+    { SKU: "Slim Fit Chinos", Price: 114.99, Cost: 51.98 },
+    { SKU: "Faux Leather Leggings", Price: 194.99, Cost: 13.06 },
+    { SKU: "Water-Resistant Fanny Pack", Price: 24.99, Cost: 23.64 },
+    { SKU: "Performance Compression Tights", Price: 14.99, Cost: 16.29 },
+    { SKU: "Cropped Faux Leather Jacket", Price: 79.99, Cost: 19.52 },
+    { SKU: "Breathable Mesh Shorts", Price: 194.99, Cost: 28.08 },
+    { SKU: "Minimalist Silver Ring", Price: 174.99, Cost: 147.34 },
+    { SKU: "Ribbed Turtleneck Dress", Price: 94.99, Cost: 22.61 },
+    { SKU: "Velvet Slip Dress", Price: 69.99, Cost: 41.64 },
+    { SKU: "Waterproof Smartwatch", Price: 144.99, Cost: 53.5 },
+    { SKU: "Patterned Cotton Bucket Hat", Price: 144.99, Cost: 114.4 },
+    { SKU: "Diamond Stud Earrings", Price: 144.99, Cost: 146.0 },
+    { SKU: "Tassel Fringe Handbag", Price: 59.99, Cost: 33.29 },
+    { SKU: "Tactical Hiking Backpack", Price: 49.99, Cost: 52.54 },
+    { SKU: "Patterned Cotton Bucket Hat", Price: 9.99, Cost: 2.14 },
+    { SKU: "Bohemian Beaded Bracelet", Price: 124.99, Cost: 116.12 },
+    { SKU: "Mesh Panel Yoga Pants", Price: 184.99, Cost: 166.86 },
+    { SKU: "Diamond Stud Earrings", Price: 14.99, Cost: 13.75 },
+    { SKU: "Faux Suede Ankle Boots", Price: 84.99, Cost: 90.43 },
+    { SKU: "Water-Resistant Fanny Pack", Price: 4.99, Cost: 3.73 },
+    { SKU: "Plaid Wool Scarf", Price: 139.99, Cost: 97.57 },
+    { SKU: "Cropped Faux Leather Jacket", Price: 179.99, Cost: 163.43 },
+    { SKU: "Textured Knit Pullover", Price: 54.99, Cost: 50.43 },
+    { SKU: "Boho Style Tassel Earrings", Price: 194.99, Cost: 193.43 },
+    { SKU: "Sherpa Lined Hooded Coat", Price: 174.99, Cost: 128.09 },
+    { SKU: "Mesh Panel Yoga Pants", Price: 69.99, Cost: 45.49 },
+    { SKU: "Graphic Print T-Shirt", Price: 109.99, Cost: 53.35 },
+    { SKU: "Fitted V-Neck Sweater", Price: 124.99, Cost: 110.24 },
+    { SKU: "Formal Dress Shoes", Price: 74.99, Cost: 8.62 },
+    { SKU: "Satin Lace Camisole", Price: 184.99, Cost: 136.15 },
+    { SKU: "Slim Fit Chinos", Price: 89.99, Cost: 61.64 },
+    { SKU: "Retro-Inspired Sunglasses", Price: 44.99, Cost: 41.12 },
+    { SKU: "Formal Velvet Blazer", Price: 194.99, Cost: 189.14 },
+    { SKU: "Striped Cotton Socks", Price: 169.99, Cost: 10.54 },
+    { SKU: "Yoga Leggings", Price: 164.99, Cost: 172.58 },
+    { SKU: "Formal Dress Shoes", Price: 9.99, Cost: 1.96 },
+    { SKU: "Aviator Sunglasses", Price: 44.99, Cost: 12.37 },
+    { SKU: "Perforated Leather Belt", Price: 44.99, Cost: 4.5 },
+    { SKU: "Smart Heated Gloves", Price: 109.99, Cost: 100.53 },
+    { SKU: "Silk Embroidered Kimono", Price: 109.99, Cost: 78.64 },
+    { SKU: "Performance Swim Trunks", Price: 174.99, Cost: 157.84 },
+    { SKU: "Tactical Hiking Backpack", Price: 69.99, Cost: 58.16 },
+    { SKU: "Thermal Running Gloves", Price: 49.99, Cost: 53.79 },
+    { SKU: "Quilted Leather Clutch", Price: 134.99, Cost: 95.84 },
+    { SKU: "Rugged Utility Jacket", Price: 44.99, Cost: 2.43 },
+    { SKU: "Tapered Suit Trousers", Price: 64.99, Cost: 53.1 },
+    { SKU: "Faux Leather Leggings", Price: 139.99, Cost: 22.54 },
+    { SKU: "Lace-Up Combat Boots", Price: 109.99, Cost: 64.89 },
+    { SKU: "Athletic Crew Socks", Price: 174.99, Cost: 1.75 },
+    { SKU: "Silk Neck Scarf", Price: 94.99, Cost: 49.87 },
+    { SKU: "Sherpa Lined Denim Jacket", Price: 119.99, Cost: 28.92 },
+    { SKU: "Lace-Up Combat Boots", Price: 24.99, Cost: 24.84 },
+    { SKU: "Sporty Zip-Up Hoodie", Price: 184.99, Cost: 65.3 },
+    { SKU: "Minimalist Gold Necklace", Price: 104.99, Cost: 52.08 },
+    { SKU: "Classic Denim Jacket", Price: 149.99, Cost: 144.29 },
+    { SKU: "Tassel Fringe Handbag", Price: 109.99, Cost: 3.19 },
+    { SKU: "Oversized Cat-Eye Sunglasses", Price: 159.99, Cost: 109.11 },
+    { SKU: "Minimalist Leather Watch", Price: 49.99, Cost: 49.89 },
+    { SKU: "Quilted Leather Clutch", Price: 4.99, Cost: 0.68 },
+    { SKU: "Floral Chiffon Wrap Dress", Price: 184.99, Cost: 39.59 },
+    { SKU: "Graphic Skateboard Tee", Price: 194.99, Cost: 53.43 },
+    { SKU: "Minimalist Silver Ring", Price: 9.99, Cost: 9.53 },
+    { SKU: "Padded Winter Mittens", Price: 154.99, Cost: 53.78 },
+    { SKU: "Classic Denim Jacket", Price: 109.99, Cost: 89.53 },
+    { SKU: "Lace-Up Combat Boots", Price: 134.99, Cost: 75.59 },
+    { SKU: "Cuffed Jogger Pants", Price: 69.99, Cost: 64.95 },
+    { SKU: "Oversized Hoodie", Price: 124.99, Cost: 23.25 },
+    { SKU: "Unisex Oversized Sweatshirt", Price: 139.99, Cost: 77.13 },
+    { SKU: "Puffer Insulated Vest", Price: 14.99, Cost: 10.72 },
+    { SKU: "Faux Fur Winter Coat", Price: 14.99, Cost: 4.56 },
+    { SKU: "Tactical Hiking Backpack", Price: 199.99, Cost: 115.79 },
+    { SKU: "Stretch Fit Slip-On Sneakers", Price: 124.99, Cost: 54.12 },
+    { SKU: "Crew Neck Merino Wool Sweater", Price: 19.99, Cost: 3.62 },
+    { SKU: "Handcrafted Wooden Watch", Price: 154.99, Cost: 122.91 },
+    { SKU: "Smart Heated Gloves", Price: 34.99, Cost: 4.13 },
+    { SKU: "Luxury Silk Tie", Price: 114.99, Cost: 49.68 },
+    { SKU: "Heavy-Duty Work Gloves", Price: 164.99, Cost: 63.03 },
+    { SKU: "Waterproof Hiking Boots", Price: 144.99, Cost: 17.25 },
+    { SKU: "Performance Swim Trunks", Price: 114.99, Cost: 41.51 },
+    { SKU: "Feather Embellished Fedora", Price: 184.99, Cost: 193.87 },
+    { SKU: "Floral Chiffon Wrap Dress", Price: 159.99, Cost: 110.23 },
+    { SKU: "Bamboo Fiber Boxer Briefs", Price: 89.99, Cost: 7.74 },
+    { SKU: "Woven Straw Sun Hat", Price: 99.99, Cost: 9.7 },
+    { SKU: "Silk Embroidered Kimono", Price: 74.99, Cost: 12.3 },
+    { SKU: "Asymmetrical Hem Skirt", Price: 184.99, Cost: 19.98 },
+    { SKU: "Wool Fedora Hat", Price: 99.99, Cost: 86.49 },
+    { SKU: "Fleece Jogger Sweatpants", Price: 79.99, Cost: 45.67 },
+    { SKU: "Cuffed Jogger Pants", Price: 114.99, Cost: 52.9 },
+    { SKU: "Relaxed Fit Cargo Pants", Price: 199.99, Cost: 80.8 },
+    { SKU: "Velvet Slip Dress", Price: 164.99, Cost: 106.75 },
+    { SKU: "Cashmere Turtleneck Sweater", Price: 99.99, Cost: 91.79 },
+    { SKU: "High-Waisted Bikini Set", Price: 64.99, Cost: 69.34 },
+    { SKU: "Minimalist Gold Necklace", Price: 74.99, Cost: 71.47 },
+    { SKU: "Oversized Cat-Eye Sunglasses", Price: 119.99, Cost: 117.83 },
+    { SKU: "Minimalist Silver Ring", Price: 64.99, Cost: 49.59 },
+    { SKU: "Sherpa Lined Denim Jacket", Price: 189.99, Cost: 28.69 },
+    { SKU: "Cropped Faux Leather Jacket", Price: 39.99, Cost: 21.03 },
+    { SKU: "Tassel Fringe Handbag", Price: 134.99, Cost: 20.79 },
+    { SKU: "Reflective Running Vest", Price: 154.99, Cost: 112.21 },
+    { SKU: "Classic Denim Jacket", Price: 24.99, Cost: 22.29 },
+    { SKU: "Faux Leather Leggings", Price: 64.99, Cost: 43.02 },
+    { SKU: "Woven Straw Sun Hat", Price: 9.99, Cost: 0.8 },
+    { SKU: "Silk Embroidered Kimono", Price: 134.99, Cost: 48.06 },
+    { SKU: "High-Slit Maxi Dress", Price: 9.99, Cost: 7.85 },
+    { SKU: "Fleece-Lined Parka", Price: 59.99, Cost: 17.4 },
+    { SKU: "Silk Neck Scarf", Price: 114.99, Cost: 120.62 },
+    { SKU: "Unisex Oversized Sweatshirt", Price: 134.99, Cost: 106.64 },
+    { SKU: "Textured Knit Pullover", Price: 34.99, Cost: 33.38 },
+    { SKU: "Luxury Silk Tie", Price: 54.99, Cost: 20.95 },
+    { SKU: "Rugged Utility Jacket", Price: 29.99, Cost: 20.69 },
+    { SKU: "Retro-Inspired Sunglasses", Price: 79.99, Cost: 82.55 },
+    { SKU: "High-Slit Maxi Dress", Price: 14.99, Cost: 6.49 },
+    { SKU: "Boho Style Tassel Earrings", Price: 104.99, Cost: 11.02 },
+    { SKU: "Metallic Hoop Earrings", Price: 84.99, Cost: 35.61 },
   ]);
 
   const [rowDataPlan, setRowDataPlan] = React.useState<PlanRow[]>([]);
@@ -901,8 +312,19 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
     return Math.floor(number).toLocaleString();
   }
 
+  const decimalFormatter = (value: number): string => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(value);
+  };
+
   function currencyFormatter(params: ValueFormatterParams) {
     return "$" + formatNumber(params.value);
+  }
+
+  function percentageFormatter(params: ValueFormatterParams) {
+    return "%" + decimalFormatter(params.value * 100);
   }
 
   // Column Definitions: Defines & controls grid columns.
@@ -921,7 +343,35 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
   ]);
 
   const [colDefsPlan, setColDefsPlan] = React.useState<ColDef<PlanRow>[]>([
+    { field: "Store" },
     { field: "SKU" },
+    { field: "Week" },
+    {
+      field: "Sales_Units",
+      cellStyle: (params) =>
+        params.value > 150
+          ? { background: "green" }
+          : params.value > 100 && params.value < 150
+            ? { background: "yellow" }
+            : params.value > 50 && params.value < 100
+              ? { background: "orange" }
+              : { background: "red" },
+    },
+    { field: "Sales_Dollars", valueFormatter: currencyFormatter },
+    { field: "Cost_Dollars", valueFormatter: currencyFormatter },
+    { field: "GM_Dollars", valueFormatter: currencyFormatter },
+    {
+      field: "GM_Percentage",
+      valueFormatter: percentageFormatter,
+      cellStyle: (params) =>
+        params.value > 0.4
+          ? { background: "green" }
+          : params.value > 0.1 && params.value < 0.4
+            ? { background: "yellow" }
+            : params.value > 0.5 && params.value < 0.1
+              ? { background: "orange" }
+              : { background: "red" },
+    },
   ]);
 
   const defaultColDef = React.useMemo(() => {
@@ -973,6 +423,8 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
         setRowDataStore(data);
       } else if (selectedTab == "SKU") {
         setRowDataSku(data);
+      } else if (selectedTab == "Planning") {
+        setRowDataPlan(data);
       }
       setFileUploaderOpen(false);
     }
@@ -997,7 +449,7 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
   //Getting the row ID:
   const getRowId = React.useCallback(
     (params: GetRowIdParams) => String(params.data.SNo),
-    [],
+    []
   );
 
   //Selecting rows ---- Deprecated usage. couldn't figure out
@@ -1016,7 +468,7 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const binaryStr = e.target?.result;
       if (!binaryStr) return;
 
@@ -1026,9 +478,9 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
 
       let transformedData: any[] = [];
       switch (selectedTab) {
-        case "Store":
+        case "Store": {
           let jsonData = XLSX.utils.sheet_to_json(
-            workbook.Sheets[workbook.SheetNames[0]],
+            workbook.Sheets[workbook.SheetNames[0]]
           ); // Convert to JSON
 
           transformedData = jsonData.map((row: any) => ({
@@ -1039,10 +491,11 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
           }));
           setData(transformedData);
           break;
+        }
 
-        case "SKU":
+        case "SKU": {
           let jsonDataSku = XLSX.utils.sheet_to_json(
-            workbook.Sheets[workbook.SheetNames[1]],
+            workbook.Sheets[workbook.SheetNames[1]]
           ); // Convert to JSON
 
           transformedData = jsonDataSku.map((row: any) => ({
@@ -1052,11 +505,162 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
           }));
           setData(transformedData);
           break;
+        }
+
+        case "Planning": {
+          let jsonDataPlan = XLSX.utils.sheet_to_json(
+            workbook.Sheets[workbook.SheetNames[4]]
+          ); // Convert to JSON
+
+          let calculationsTable = sanitizeColumnNames(
+            XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[4]])
+          );
+          let storesTable = sanitizeColumnNames(
+            XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
+          );
+          let skuTable = sanitizeColumnNames(
+            XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[1]])
+          );
+          let calendarTable = sanitizeColumnNames(
+            XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[2]])
+          );
+
+          // try {
+          //   // Create an in-memory SQLite database
+          //   const SQL = await initSqlJs({
+          //     locateFile: (file) => `/sql-wasm/dist/sql-wasm.wasm`, // Correct location in public/
+          //   });
+          //   const db = new SQL.Database();
+
+          //   console.log("DB Created! ", db);
+          //   // Function to create table from JSON
+          //   const createTableFromJson = (
+          //     tableName: string,
+          //     jsonData: any[]
+          //   ) => {
+          //     if (jsonData.length === 0) {
+          //       console.log("Table does not contain any data");
+          //       return;
+          //     }
+
+          //     console.log(
+          //       "Creating table from Excel data for table: ",
+          //       tableName
+          //     );
+          //     const columns = Object.keys(jsonData[0]);
+          //     const createTableQuery = `
+          //   CREATE TABLE ${tableName} (${columns.map((col) => `"${col}" TEXT`).join(", ")});`;
+          //     db.run(createTableQuery);
+
+          //     jsonData.forEach((row) => {
+          //       const values = columns.map((col) => `'${row[col]}'`).join(", ");
+          //       const insertQuery = `INSERT INTO ${tableName} (${columns.join(", ")}) VALUES (${values});`;
+          //       db.run(insertQuery);
+          //     });
+          //   };
+
+          //   // Create tables
+          //   createTableFromJson("Calculations", calculationsTable);
+          //   createTableFromJson("Stores", storesTable);
+          //   createTableFromJson("SKU", skuTable);
+          //   createTableFromJson("Calendar", calendarTable);
+
+          //   setDb(db); // Save the database instance in state
+          //   runQuery();
+          //   console.log("Query ran successfully");
+
+          //   transformedData = jsonDataPlan.map((row: any) => ({
+          //     SKU: row.Label,
+          //     Price: row.Price,
+          //     Cost: row.Cost,
+          //   }));
+          //   setData(jsonDataPlan);
+          // } catch (error) {
+          //   console.error("Error while initializing DB!");
+          //   console.log("Falling back to default static data!");
+          // }
+
+          //Static Data from Calculations Sheet
+          transformedData = jsonDataPlan.map((row: any) => ({
+            Store: row.Store,
+            SKU: row.SKU,
+            Week: row.Week,
+            Sales_Units: row["Sales Units"],
+            Sales_Dollars: row["Sales Dollars"],
+            Cost_Dollars: row["Cost Dollars"],
+            GM_Dollars: row["GM Dollars"],
+            GM_Percentage: row["GM %"],
+          }));
+          setData(transformedData);
+
+          break;
+        }
       }
     };
 
     reader.readAsBinaryString(file);
   };
+
+  //Column names/headrs sanitization
+  const sanitizeColumnNames = (jsonData: any[]) => {
+    console.log("Sanitizing Columns");
+    return jsonData.map((row) => {
+      const sanitizedRow: any = {};
+      Object.keys(row).forEach((key) => {
+        const sanitizedKey = key
+          .trim()
+          .replace(/\s+/g, "_") // Replace spaces with underscores
+          .replace(/[^a-zA-Z0-9_]/g, ""); // Remove special characters
+
+        sanitizedRow[sanitizedKey] = row[key];
+      });
+      return sanitizedRow;
+    });
+  };
+
+  //SQL Query for Planning table
+  // const runQuery = () => {
+  //   if (!db) {
+  //     alert("No database available. Upload an Excel file first.");
+  //     return;
+  //   }
+
+  //   console.log("Running Query");
+  //   const query = `
+  //   SELECT
+  //       s.Label AS Store,
+  //       sk.Label AS SKU,
+  //       cal.Week,
+  //       cal."Month-Label",
+  //       c.Sales_Units,
+  //       c.Sales_Dollars,
+  //       c.GM_Dollars,
+  //       CASE
+  //           WHEN c.Sales_Dollars = 0 THEN 0
+  //           ELSE c.GM_Dollars / c.Sales_Dollars
+  //       END AS GM_Percent
+  //   FROM Calculations c
+  //   JOIN Stores s ON c.Store = s.ID
+  //   JOIN SKU sk ON c.SKU = sk.ID
+  //   JOIN Calendar cal ON c.Week = cal.Week;
+  // `;
+
+  //   const result = db.exec(query);
+
+  //   // Extract column names & rows
+  //   if (result.length > 0) {
+  //     const columns = result[0].columns;
+  //     const rows = result[0].values.map((row: any) =>
+  //       Object.fromEntries(row.map((val: any, i: any) => [columns[i], val]))
+  //     );
+
+  //     setQueryResult(rows);
+  //     console.log("Query Result: ", rows);
+  //   } else {
+  //     console.log("Query resulted in a null set");
+  //     setQueryResult([]);
+  //   }
+  // };
 
   //MUI MUIMUIMUI
   //   const columns: GridColDef[] = [
@@ -1111,7 +715,7 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
     <>
       <div
         style={{
-          width: "45%",
+          width: selectedTab == "Planning" ? "85%" : "45%",
           height: "82%",
           maxHeight: "82%",
           position: "absolute",
@@ -1120,20 +724,25 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
           border: "1px solid #bbbbbb",
         }}
       >
+        {/* Main Grid from Ag-Grid Library  */}
         <AgGridReact
           rowData={
             selectedTab == "Store"
               ? rowDataStore
               : selectedTab == "SKU"
                 ? rowDataSku
-                : rowDataPlan
+                : selectedTab == "Planning"
+                  ? rowDataPlan
+                  : rowDataStore
           }
           columnDefs={
             selectedTab == "Store"
               ? colDefsStore
               : selectedTab == "SKU"
                 ? colDefsSku
-                : colDefsPlan
+                : selectedTab == "Planning"
+                  ? colDefsPlan
+                  : colDefsStore
           }
           defaultColDef={defaultColDef}
           pagination={pagination}
@@ -1146,17 +755,24 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
           undoRedoCellEditingLimit={undoRedoCellEditingLimit}
         />
       </div>
-      <Button
-        variant="outlined"
-        sx={{ position: "absolute", left: "250px", bottom: "20px" }}
-        onClick={handleOpen}
-      >
-        {selectedTab == "Store"
-          ? "Add Store"
-          : selectedTab == "SKU"
-            ? "Add SKU"
-            : ""}
-      </Button>
+
+      {/* Add Record Button  */}
+      {selectedTab == "SKU" ||
+        (selectedTab == "Store" && (
+          <Button
+            variant="outlined"
+            sx={{ position: "absolute", left: "250px", bottom: "20px" }}
+            onClick={handleOpen}
+          >
+            {selectedTab == "Store"
+              ? "Add Store"
+              : selectedTab == "SKU"
+                ? "Add SKU"
+                : ""}
+          </Button>
+        ))}
+
+      {/* Add Record Dialog Box  */}
       <Dialog
         open={dialogBoxOpen}
         onClose={handleClose}
@@ -1248,13 +864,20 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
         )}
       </Dialog>
 
+      {/* FileUploader Button  */}
       <Button
         variant="outlined"
-        sx={{ position: "absolute", left: "400px", bottom: "20px" }}
+        sx={{
+          position: "absolute",
+          left: selectedTab == "Planning" ? "250px" : "400px",
+          bottom: "20px",
+        }}
         onClick={handleFileUploaderOpen}
       >
         Upload File
       </Button>
+
+      {/* File Uploader Dialog Box  */}
       <Dialog
         open={fileUploaderOpen}
         onClose={() => setFileUploaderOpen(false)}

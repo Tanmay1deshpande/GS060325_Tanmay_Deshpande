@@ -6,18 +6,19 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import "./Navbar.css";
+import { APP_NAME } from "../../constants/general/generalConstants";
+// import { logout } from "../../store/authSlice";
+import { useAuth } from "../../context/authContext";
 
 type Props = {};
 
 const Navbar: React.FC<Props> = (props) => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { logout } = useAuth();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
@@ -46,7 +47,7 @@ const Navbar: React.FC<Props> = (props) => {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Photos
+              {APP_NAME}
             </Typography>
             {auth && (
               <div>
@@ -77,6 +78,7 @@ const Navbar: React.FC<Props> = (props) => {
                 >
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                   <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={logout}>Sign Out</MenuItem>
                 </Menu>
               </div>
             )}

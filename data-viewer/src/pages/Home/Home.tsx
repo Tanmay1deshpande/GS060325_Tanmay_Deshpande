@@ -8,7 +8,7 @@ import TableSKU from "../../components/TableMain/TableSKU";
 
 type Props = {};
 
-const Home = (props: Props) => {
+const Home = (_props: Props) => {
   // State to track the selected tab
   const [selectedTab, setSelectedTab] = React.useState<string>("Store");
 
@@ -24,6 +24,12 @@ const Home = (props: Props) => {
       {selectedTab == "Store" && <TableStore selectedTab={selectedTab} />}
 
       {selectedTab == "SKU" && <TableStore selectedTab={selectedTab} />}
+
+      {selectedTab == "Planning" && <TableStore selectedTab={selectedTab} />}
+
+      {/* {["Store", "SKU", "Planning"].includes(selectedTab) && (
+        <TableStore selectedTab={selectedTab} />
+      )} */}
 
       {selectedTab == "Charts" && <Chart selectedTab={selectedTab} />}
     </div>
