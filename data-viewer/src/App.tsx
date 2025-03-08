@@ -24,6 +24,7 @@ function App() {
     return token ? element : <Navigate to="/login" />;
   };
 
+  const authToken = Cookies.get("token") || localStorage.getItem("authToken");
   // Function to remove all cookies
   const clearCookies = () => {
     // Get all cookies
@@ -48,8 +49,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             {/* <Route path="/romeo" element={<Home />} /> */}
             <Route path="/chart" element={<Chart />} />
-            {/* <PrivateRoute path="/home" element={<Home />} /> */}
-            <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+            <Route path="/home" element={authToken ? <Home /> : <Login />} />
+            {/* <Route path="/home" element={<PrivateRoute element={<Home />} />} />s */}
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </Router>

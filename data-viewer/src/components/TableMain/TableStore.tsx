@@ -356,6 +356,7 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
             : params.value > 50 && params.value < 100
               ? { background: "orange" }
               : { background: "red" },
+      editable: true,
     },
     { field: "Sales_Dollars", valueFormatter: currencyFormatter },
     { field: "Cost_Dollars", valueFormatter: currencyFormatter },
@@ -715,7 +716,12 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
     <>
       <div
         style={{
-          width: selectedTab == "Planning" ? "85%" : "45%",
+          width:
+            selectedTab == "Planning"
+              ? "80%"
+              : selectedTab == "Store"
+                ? "55%"
+                : "45%",
           height: "82%",
           maxHeight: "82%",
           position: "absolute",
@@ -757,20 +763,16 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
       </div>
 
       {/* Add Record Button  */}
-      {selectedTab == "SKU" ||
-        (selectedTab == "Store" && (
-          <Button
-            variant="outlined"
-            sx={{ position: "absolute", left: "250px", bottom: "20px" }}
-            onClick={handleOpen}
-          >
-            {selectedTab == "Store"
-              ? "Add Store"
-              : selectedTab == "SKU"
-                ? "Add SKU"
-                : ""}
-          </Button>
-        ))}
+
+      {["SKU", "Store"].includes(selectedTab) && (
+        <Button
+          variant="outlined"
+          sx={{ position: "absolute", left: "250px", bottom: "15px" }}
+          onClick={handleOpen}
+        >
+          {selectedTab === "Store" ? "Add Store" : "Add SKU"}
+        </Button>
+      )}
 
       {/* Add Record Dialog Box  */}
       <Dialog
@@ -869,8 +871,15 @@ const TableStore: React.FC<Props> = ({ selectedTab }) => {
         variant="outlined"
         sx={{
           position: "absolute",
-          left: selectedTab == "Planning" ? "250px" : "400px",
-          bottom: "20px",
+          left:
+            selectedTab == "Planning"
+              ? "250px"
+              : selectedTab == "SKU"
+                ? "350px"
+                : selectedTab == "Store"
+                  ? "370px"
+                  : "400px",
+          bottom: "15px",
         }}
         onClick={handleFileUploaderOpen}
       >

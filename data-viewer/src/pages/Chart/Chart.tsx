@@ -239,7 +239,7 @@ const Chart: React.FC<Props> = ({ selectedTab }) => {
     <div
       className="ag-theme-alpine"
       style={{
-        width: "85%",
+        width: "80%",
         position: "absolute",
         top: "74px",
         left: "250px",
