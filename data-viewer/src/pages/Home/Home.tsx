@@ -12,6 +12,10 @@ const Home = (props: Props) => {
   // State to track the selected tab
   const [selectedTab, setSelectedTab] = React.useState<string>("Store");
 
+  React.useEffect(() => {
+    console.log("Open Tab: " + selectedTab);
+  }, [selectedTab]);
+
   return (
     <div>
       <Navbar />
@@ -19,7 +23,7 @@ const Home = (props: Props) => {
 
       {selectedTab == "Store" && <TableStore selectedTab={selectedTab} />}
 
-      {selectedTab == "SKU" && <TableSKU selectedTab={selectedTab} />}
+      {selectedTab == "SKU" && <TableStore selectedTab={selectedTab} />}
 
       {selectedTab == "Charts" && <Chart selectedTab={selectedTab} />}
     </div>
