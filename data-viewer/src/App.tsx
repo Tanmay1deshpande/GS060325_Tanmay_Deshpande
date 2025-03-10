@@ -47,7 +47,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            {/* <Route path="/romeo" element={<Home />} /> */}
+            <Route path="/bypass" element={<Home />} />
             <Route path="/chart" element={<Chart />} />
             <Route path="/home" element={authToken ? <Home /> : <Login />} />
             {/* <Route path="/home" element={<PrivateRoute element={<Home />} />} />s */}
