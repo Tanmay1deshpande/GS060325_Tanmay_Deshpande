@@ -22,7 +22,12 @@ Created a Button component but realized I only need one type of button so I used
 
 Some parts of the code are not utilized as I had to quickly move to more practical alternatives and did not get time for code cleanup. However I think it highlights the fact that I gave it my best and tried numerous different techniques to achieve my goal.
 
-**#Instructions on how to access:**
+**#Instructions on how to access deployed Site:**
+1. access website on : https://gs060325-tanmay-deshpande.onrender.com
+2. Login Credentials:  username: recruiter & password: hireMe@GreatFit.yay
+
+
+**#Instructions on how to access through local:**
 
 1. Clone the repository in your respective IDE (recommended to use VSCode)
 2. Open the terminal using ctrl + shift + `
@@ -31,11 +36,14 @@ Some parts of the code are not utilized as I had to quickly move to more practic
 5. Go to the server folder of the project using the terminal. "cd your_source_folder/src/backend/server"
 6. In the terminal type node server.js to start the backend express server.
 7. Check if the terminal outputs "Server running on port 5000", If no, try a different server initialization such as: "npx nodemon server.js"
-8. Start a new terminal for frontend using Ctrl + Shift + +
-9. Type npm start to start the frontend server on port 3000.
-10. Go to http://localhost:3000/login to view the application
-11. Use credentials: Username: recruiter & Password: hireMe@GreatFit.yay
-12. For debugging of the login API without frontend you can use Thunder CLient extension in VSCode to send a request after starting the backend server. send request to "http://localhost:5000/api/login with body: { "username":"recruiter", "password":"hireMe@GreatFit.yay" }. (Only if login fails on your end).
+8. If running only on local then go to the Login.tsx file and comment line 54 and uncomment line 53 : // API_HTTP + REACT_APP_API_URL + loginApiEndpoint, //For Local
+        RENDER_API_ENDPOINT_LOGIN, //FOR HOSTED BACKEND ON RENDER
+Use the one local endpoint and not the RENDER_API_ENDPOINT_LOGIN.
+9. Start a new terminal for frontend using Ctrl + Shift + +
+10. Type npm start to start the frontend server on port 3000.
+11. Go to http://localhost:3000/login to view the application
+12. Use credentials: Username: recruiter & Password: hireMe@GreatFit.yay
+13. For debugging of the login API without frontend you can use Thunder CLient extension in VSCode to send a request after starting the backend server. send request to "http://localhost:5000/api/login with body: { "username":"recruiter", "password":"hireMe@GreatFit.yay" }. (Only if login fails on your end).
 
 **Looking forward to working with you. **
 
