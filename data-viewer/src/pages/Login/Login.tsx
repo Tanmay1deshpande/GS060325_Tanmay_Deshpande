@@ -13,6 +13,7 @@ import {
   API_HTTP,
   loginApiEndpoint,
   REACT_APP_API_URL,
+  RENDER_API_ENDPOINT_LOGIN
 } from "../../constants/api/apiConstants";
 // import {ReactComponent as Logo} from "../../assets/images/logo.svg"
 // import { loginUser } from "../services/authService";
@@ -49,7 +50,8 @@ const Login: React.FC = () => {
     console.log("Endpoint: ", API_HTTP + REACT_APP_API_URL + loginApiEndpoint);
     try {
       const response = await axios.post(
-        API_HTTP + REACT_APP_API_URL + loginApiEndpoint,
+        // API_HTTP + REACT_APP_API_URL + loginApiEndpoint, //For Local
+        RENDER_API_ENDPOINT_LOGIN, //FOR HOSTED BACKEND ON RENDER
         {
           username,
           password,
