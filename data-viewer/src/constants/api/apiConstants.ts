@@ -10,4 +10,5 @@ export const PORT = 5000;
 export const REACT_APP_API_URL = "/api";
 export const API_HTTP = "http://localhost:5000";
 export const loginApiEndpoint = "/login";
-export const RENDER_API_ENDPOINT_LOGIN = "https://gs060325-data-viewer.onrender.com/api/login"
+export const RENDER_API_ENDPOINT_LOGIN =
+  "https://gs060325-data-viewer.onrender.com/api/login";

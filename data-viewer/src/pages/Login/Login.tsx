@@ -13,7 +13,7 @@ import {
   API_HTTP,
   loginApiEndpoint,
   REACT_APP_API_URL,
-  RENDER_API_ENDPOINT_LOGIN
+  RENDER_API_ENDPOINT_LOGIN,
 } from "../../constants/api/apiConstants";
 // import {ReactComponent as Logo} from "../../assets/images/logo.svg"
 // import { loginUser } from "../services/authService";
