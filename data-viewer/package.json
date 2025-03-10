@@ -45,8 +45,10 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node app.js",
     "build": "react-scripts build",
+    "heroku-postbuild": "npm run build --prefix client",
+    "client": "npm start --prefix client",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint-fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
